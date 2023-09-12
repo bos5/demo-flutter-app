@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../FlutterApp"
+		},
+		{
+			"name": "demo-flutter-app",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
