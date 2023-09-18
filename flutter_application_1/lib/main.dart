@@ -164,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 )),
             Container(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10, bottom: 5),
               alignment: Alignment.center,
               child: Text('Or sign in with',
                   style: TextStyle(fontSize: 15, color: Colors.grey[400])),
@@ -198,13 +198,15 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
               alignment: Alignment.center,
               child: Text('Or sign in with',
                   style: TextStyle(fontSize: 15, color: Colors.grey[400])),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
               alignment: Alignment.center,
               child: TextButton(
                 onPressed: () {
@@ -214,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
                 child: const Text('Sign up',
-                    style: TextStyle(fontSize: 15, color: Colors.black)),
+                    style: TextStyle(fontSize: 20, color: Colors.black)),
               ),
             ),
           ],

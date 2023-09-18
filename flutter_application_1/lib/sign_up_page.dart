@@ -9,9 +9,17 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   bool value = false;
+  final myControler = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 40,
+        title: const Text('Sign up'),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         width: double.infinity,
@@ -30,15 +38,6 @@ class _SignUpPageState extends State<SignUpPage> {
               "images/doctors.png",
               scale: 2.5,
               // height: 300,
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            alignment: Alignment.centerLeft,
-            child: const Text(
-              'Sign up',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.left,
             ),
           ),
           Padding(
