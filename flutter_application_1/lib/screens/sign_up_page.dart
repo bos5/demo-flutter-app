@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/screens/login_page.dart';
+import 'package:flutter_application_1/utils/validate.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class MySignUpPage extends StatefulWidget {
+  const MySignUpPage({super.key});
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<MySignUpPage> createState() => _MySignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _MySignUpPageState extends State<MySignUpPage> {
   bool value = false;
-  final myControler = TextEditingController();
+  // bool _validate = false;
+  final _validate = [false, false, false, false];
+  final _usernameContrl = TextEditingController();
+  final _emailContrl = TextEditingController();
+  final _pwdContrl = TextEditingController();
+  final _pwdContrl2 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,14 +39,14 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Image.asset(
-              "images/doctors.png",
-              scale: 2.5,
-              // height: 300,
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(10),
+          //   child: Image.asset(
+          //     "images/doctors.png",
+          //     scale: 2.5,
+          //     // height: 300,
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
             child: Column(
@@ -55,7 +62,21 @@ class _SignUpPageState extends State<SignUpPage> {
                         fillColor: Colors.white,
                         hintText: 'Enter your username',
                         hintStyle: TextStyle(color: Colors.grey[400]),
+                        errorText:
+                            _validate[0] ? 'Value Can\'t Be Empty' : null,
                       ),
+                      controller: _usernameContrl,
+                      onSubmitted: (value1) {
+                        if (value1.isEmpty) {
+                          setState(() {
+                            _validate[0] = true;
+                          });
+                        } else {
+                          setState(() {
+                            _validate[0] = false;
+                          });
+                        }
+                      },
                     )),
               ],
             ),
@@ -75,7 +96,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         fillColor: Colors.white,
                         hintText: 'Enter your email',
                         hintStyle: TextStyle(color: Colors.grey[400]),
+                        errorText: _validate[1] ? 'Not email format' : null,
                       ),
+                      controller: _emailContrl,
+                      onEditingComplete: () {
+                        setState(() {
+                          _validate[1] = !validateEmail(_emailContrl.text);
+                        });
+                      },
                     )),
               ],
             ),
@@ -91,11 +119,19 @@ class _SignUpPageState extends State<SignUpPage> {
                       color: Colors.white,
                     ),
                     child: TextField(
+                      obscureText: true,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         hintText: 'Enter your password',
                         hintStyle: TextStyle(color: Colors.grey[400]),
+                        errorText: _validate[2] ? 'Not password format' : null,
                       ),
+                      controller: _pwdContrl,
+                      onEditingComplete: () {
+                        setState(() {
+                          _validate[2] = !validatePassword(_pwdContrl.text);
+                        });
+                      },
                     )),
               ],
             ),
@@ -111,12 +147,18 @@ class _SignUpPageState extends State<SignUpPage> {
                       color: Colors.white,
                     ),
                     child: TextField(
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        hintText: 'Confirm your password',
-                        hintStyle: TextStyle(color: Colors.grey[400]),
-                      ),
-                    )),
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          hintText: 'Confirm your password',
+                          hintStyle: TextStyle(color: Colors.grey[400]),
+                          errorText: _validate[3] ? 'Not match password' : null,
+                        ),
+                        controller: _pwdContrl2,
+                        onEditingComplete: () => setState(() {
+                              _validate[3] = !validateConfirmPassword(
+                                  _pwdContrl2.text, _pwdContrl.text);
+                            }))),
               ],
             ),
           ),
@@ -145,11 +187,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MyHomePage()));
+                        builder: (context) => const MyLoginPage()));
               },
               style: ElevatedButton.styleFrom(
-                // primary: Theme.of(context).colorScheme.secondary,
-                // padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
