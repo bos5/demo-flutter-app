@@ -99,7 +99,7 @@ class _MySignUpPageState extends State<MySignUpPage> {
                         errorText: _validate[1] ? 'Not email format' : null,
                       ),
                       controller: _emailContrl,
-                      onEditingComplete: () {
+                      onSubmitted: (value) {
                         setState(() {
                           _validate[1] = !validateEmail(_emailContrl.text);
                         });
@@ -127,9 +127,9 @@ class _MySignUpPageState extends State<MySignUpPage> {
                         errorText: _validate[2] ? 'Not password format' : null,
                       ),
                       controller: _pwdContrl,
-                      onEditingComplete: () {
+                      onChanged: (value) {
                         setState(() {
-                          _validate[2] = !validatePassword(_pwdContrl.text);
+                          _validate[2] = !validatePassword(value);
                         });
                       },
                     )),
@@ -155,9 +155,9 @@ class _MySignUpPageState extends State<MySignUpPage> {
                           errorText: _validate[3] ? 'Not match password' : null,
                         ),
                         controller: _pwdContrl2,
-                        onEditingComplete: () => setState(() {
+                        onChanged: (value) => setState(() {
                               _validate[3] = !validateConfirmPassword(
-                                  _pwdContrl2.text, _pwdContrl.text);
+                                  value, _pwdContrl.text);
                             }))),
               ],
             ),
@@ -184,10 +184,16 @@ class _MySignUpPageState extends State<MySignUpPage> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
+                if (_validate.contains(true) || !value) {
+                  return;
+                } else {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MyLoginPage()));
+                      builder: (context) => const MyLoginPage(),
+                    ),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
