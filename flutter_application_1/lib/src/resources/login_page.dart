@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/src/app.dart';
+import 'package:flutter_application_1/src/resources/dialog/loading_dialog.dart';
+import 'package:flutter_application_1/src/resources/dialog/msg_dialog.dart';
+import 'package:flutter_application_1/src/resources/home_page.dart';
 import 'package:flutter_application_1/src/resources/register_page.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:logger/logger.dart';
@@ -12,6 +16,8 @@ class MyLoginPage extends StatefulWidget {
 
 class _MyLoginPage extends State<MyLoginPage> {
   final Logger logger = Logger();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +45,11 @@ class _MyLoginPage extends State<MyLoginPage> {
                 alignment: AlignmentDirectional.bottomStart,
                 child: const Text('Username'),
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
                 child: TextField(
-                  decoration: InputDecoration(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
                     labelText: 'Type your username',
                     prefixIcon: Icon(Icons.person),
                   ),
@@ -52,9 +59,10 @@ class _MyLoginPage extends State<MyLoginPage> {
                 alignment: AlignmentDirectional.bottomStart,
                 child: const Text('Password'),
               ),
-              const TextField(
+              TextField(
+                controller: _passController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Type your password',
                   prefixIcon: Icon(Icons.lock),
                 ),
@@ -71,7 +79,7 @@ class _MyLoginPage extends State<MyLoginPage> {
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  logger.d('Login submitted');
+                  _onLoginClick();
                 },
                 child: const Text('LOGIN'),
               ),
@@ -127,5 +135,21 @@ class _MyLoginPage extends State<MyLoginPage> {
         ),
       ),
     );
+  }
+
+  void _onLoginClick() {
+    String email = _emailController.text;
+    String pass = _passController.text;
+    var authBloc = MyApp.of(context)!.authBloc;
+
+    LoadingDialog.showLoadingDialog(context, "Loading...");
+    authBloc.signIn(email, pass, () {
+      LoadingDialog.hideLoadingDialog(context);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => HomePage()));
+    }, (msg) {
+      LoadingDialog.hideLoadingDialog(context);
+      MsgDialog.showMsgDialog(context, "Sign in", msg);
+    });
   }
 }

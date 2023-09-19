@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/blocs/auth_bloc.dart';
+import 'package:flutter_application_1/src/resources/dialog/loading_dialog.dart';
+import 'package:flutter_application_1/src/resources/dialog/msg_dialog.dart';
 import 'package:flutter_application_1/src/resources/home_page.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
-import 'package:logger/logger.dart';
 
 class MyRegisterPage extends StatefulWidget {
   MyRegisterPage({super.key});
@@ -14,7 +15,6 @@ class MyRegisterPage extends StatefulWidget {
 }
 
 class _MyRegisterPage extends State<MyRegisterPage> {
-  Logger logger = Logger();
   AuthBloc authBloc = AuthBloc();
 
   final TextEditingController _nameController = TextEditingController();
@@ -167,13 +167,20 @@ class _MyRegisterPage extends State<MyRegisterPage> {
         _emailController.text, _passController.text);
     if (isValid) {
       // create user here
+      // loading dialog here
+      LoadingDialog.showLoadingDialog(context, 'Loading...');
       authBloc.signUp(_emailController.text, _passController.text,
           _phoneController.text, _nameController.text, () {
+        LoadingDialog.hideLoadingDialog(context);
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => HomePage(),
             ));
+      }, (msg) {
+        // show message dialog to let user know error
+        LoadingDialog.hideLoadingDialog(context);
+        MsgDialog.showMsgDialog(context, 'Sign Up', msg);
       });
     }
   }

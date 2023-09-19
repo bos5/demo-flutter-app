@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_application_1/src/fire_base/fire_base_auth.dart';
 
 class AuthBloc {
-  var _firAuth = FirAuth();
+  final _firAuth = FirAuth();
 
   final StreamController _nameController = StreamController();
   final StreamController _phoneController = StreamController();
@@ -43,8 +43,13 @@ class AuthBloc {
   }
 
   void signUp(String email, String pass, String phone, String name,
-      Function onSuccess) {
-    _firAuth.signUp(email, pass, phone, name, onSuccess);
+      Function onSuccess, Function(String) onRegisterError) {
+    _firAuth.signUp(email, pass, phone, name, onSuccess, onRegisterError);
+  }
+
+  void signIn(String email, String pass, Function onSuccess,
+      Function(String) onSignInError) {
+    _firAuth.signIn(email, pass, onSuccess, onSignInError);
   }
 
   void dispose() {

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'resources/login_page.dart';
+import 'package:flutter_application_1/src/blocs/auth_bloc.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends InheritedWidget {
+  final AuthBloc authBloc;
+  final Widget child;
+  MyApp(this.authBloc, this.child) : super(child: child);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: MyLoginPage(),
-      debugShowCheckedModeBanner: false,
-    );
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    return false;
+  }
+
+  static MyApp? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<MyApp>();
   }
 }
