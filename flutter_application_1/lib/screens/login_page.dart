@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/home_screen.dart';
+import 'package:flutter_application_1/firebase_activity/firebase_login_signup.dart';
+import 'package:flutter_application_1/screens/login_option.dart';
 import 'package:flutter_application_1/screens/sign_up_page.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_application_1/utils/validate.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -10,8 +11,12 @@ class MyLoginPage extends StatefulWidget {
 }
 
 class _MyLoginPageState extends State<MyLoginPage> {
+  bool emailValid = false;
   @override
   Widget build(BuildContext context) {
+    var emailContrl = TextEditingController();
+    var passwordContrl = TextEditingController();
+
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -57,7 +62,14 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           prefixIcon: const Icon(Icons.person),
                           hintText: 'Enter your username',
                           hintStyle: TextStyle(color: Colors.grey[400]),
+                          errorText: emailValid ? 'Invalid username' : null,
                         ),
+                        onSubmitted: (value) {
+                          setState(() {
+                            emailValid = !validateEmail(value);
+                          });
+                        },
+                        controller: emailContrl,
                       ),
                     )
                   ],
@@ -82,10 +94,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       alignment: Alignment.centerLeft,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
+                      // decoration: const BoxDecoration(
+                      //   color: Colors.white,
+                      //   borderRadius: BorderRadius.all(Radius.circular(10)),
+                      // ),
                       child: TextField(
                         obscureText: true,
                         decoration: InputDecoration(
@@ -93,6 +105,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           hintText: 'Enter your password',
                           hintStyle: TextStyle(color: Colors.grey[400]),
                         ),
+                        controller: passwordContrl,
                       ),
                     ),
                   ],
@@ -111,10 +124,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MyHomePage()));
+                  if (emailContrl.text.isEmpty || passwordContrl.text.isEmpty) {
+                    return;
+                  } else {
+                    loginWithEmail(context, emailContrl, passwordContrl);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 216, 36, 126),
@@ -135,34 +149,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               child: Text('Or sign in with',
                   style: TextStyle(fontSize: 15, color: Colors.grey[400])),
             ),
-            ButtonTheme(
-              child: ButtonBar(
-                alignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        FontAwesomeIcons.facebook,
-                        size: 40,
-                        color: Colors.blue[900],
-                      )),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        FontAwesomeIcons.google,
-                        size: 40,
-                        color: Colors.red[900],
-                      )),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        FontAwesomeIcons.twitter,
-                        size: 40,
-                        color: Colors.blue,
-                      )),
-                ],
-              ),
-            ),
+            loginOption(),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -177,10 +164,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MySignUpPage()),
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MySignUpPage()));
                 },
                 child: const Text('Sign up',
                     style: TextStyle(fontSize: 20, color: Colors.black)),

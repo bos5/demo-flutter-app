@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/login_page.dart';
+import 'package:flutter_application_1/firebase_activity/firebase_login_signup.dart';
 import 'package:flutter_application_1/utils/validate.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class MySignUpPage extends StatefulWidget {
   const MySignUpPage({super.key});
@@ -166,7 +164,6 @@ class _MySignUpPageState extends State<MySignUpPage> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            // alignment: Alignment.centerLeft,
             child: CheckboxListTile(
               title: const Text(
                 'I agree to the terms and conditions',
@@ -189,17 +186,8 @@ class _MySignUpPageState extends State<MySignUpPage> {
                 if (_validate.contains(true) || !value) {
                   return;
                 } else {
-                  FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                          email: _emailContrl.text, password: _pwdContrl.text)
-                      .then((value) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MyLoginPage(),
-                      ),
-                    );
-                  });
+                  signUpWithEmail(
+                      context, _emailContrl, _pwdContrl, value, _validate);
                 }
               },
               style: ElevatedButton.styleFrom(
