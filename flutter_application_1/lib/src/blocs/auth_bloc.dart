@@ -16,25 +16,25 @@ class AuthBloc {
 
   bool isValid(String name, String phone, String email, String pass) {
     if (name.isEmpty) {
-      _nameController.sink.add("Nhap ten");
+      _nameController.sink.addError("Nhap ten");
       return false;
     }
     _nameController.sink.add("");
 
     if (phone.isEmpty) {
-      _phoneController.sink.add("Nhap so dien thoai");
+      _phoneController.sink.addError("Nhap so dien thoai");
       return false;
     }
     _phoneController.sink.add("");
 
     if (email.isEmpty) {
-      _emailController.sink.add("Nhap email");
+      _emailController.sink.addError("Nhap email");
       return false;
     }
     _emailController.sink.add("");
 
     if (pass.isEmpty || pass.length < 6) {
-      _passController.sink.add("Mat khau phai tren 5 ki tu");
+      _passController.sink.addError("Mat khau phai tren 5 ki tu");
       return false;
     }
     _passController.sink.add("");
