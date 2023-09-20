@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "F:/flutter_windows_3.13.3-stable/demo-flutter-app/flutter_application_1/linux"
+    "cmake.sourceDirectory": "F:/flutter_windows_3.13.3-stable/demo-flutter-app/flutter_application_1/linux",
+    "java.compile.nullAnalysis.mode": "automatic"
 }

@@ -22,7 +22,7 @@ class _MySignUpPageState extends State<MySignUpPage> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 40,
-        title: const Text('Sign up'),
+        title: const Text('dung phung'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,

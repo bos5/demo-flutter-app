@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 ButtonTheme loginOption() {
   return ButtonTheme(
@@ -7,7 +8,9 @@ ButtonTheme loginOption() {
       alignment: MainAxisAlignment.center,
       children: [
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              FacebookAuth.instance.login();
+            },
             icon: Icon(
               FontAwesomeIcons.facebook,
               size: 40,
