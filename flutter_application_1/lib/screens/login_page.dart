@@ -149,7 +149,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               child: Text('Or sign in with',
                   style: TextStyle(fontSize: 15, color: Colors.grey[400])),
             ),
-            loginOption(),
+            loginOption(context),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
