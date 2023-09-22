@@ -10,14 +10,16 @@ import 'package:logger/logger.dart';
 class MyLoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _MyLoginPage();
+    return _LoginPageState();
   }
 }
 
-class _MyLoginPage extends State<MyLoginPage> {
+class _LoginPageState extends State<MyLoginPage> {
   final Logger logger = Logger();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passController = TextEditingController();
+  bool _emailInvalid = false;
+  bool _passInvalid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +45,24 @@ class _MyLoginPage extends State<MyLoginPage> {
               ),
               Container(
                 alignment: AlignmentDirectional.bottomStart,
-                child: const Text('Username'),
+                child: const Text('Email'),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
                 child: TextField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Type your username',
-                    prefixIcon: Icon(Icons.person),
+                  decoration: InputDecoration(
+                    labelText: 'Type your email',
+                    prefixIcon: const Icon(Icons.person),
+                    errorText: _emailInvalid ? "Invalid email" : null,
                   ),
+                  onSubmitted: (value) {
+                    setState(() {
+                      RegExp emailRegExp = RegExp(
+                          r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+                      _emailInvalid = !emailRegExp.hasMatch(value);
+                    });
+                  },
                 ),
               ),
               Container(
@@ -62,10 +72,18 @@ class _MyLoginPage extends State<MyLoginPage> {
               TextField(
                 controller: _passController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Type your password',
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: const Icon(Icons.lock),
+                  errorText: _passInvalid ? "Invalid password" : null,
                 ),
+                onSubmitted: (value) {
+                  setState(() {
+                    RegExp passwordRegExp =
+                        RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$');
+                    _passInvalid = !passwordRegExp.hasMatch(value);
+                  });
+                },
               ),
               Align(
                 alignment: Alignment.centerRight,
@@ -105,7 +123,7 @@ class _MyLoginPage extends State<MyLoginPage> {
                   ),
                   IconButton(
                     onPressed: () {
-                      logger.d('Login with Google');
+                      _onLoginWithGoogleClick();
                     },
                     icon: const Icon(FontAwesome.google),
                   ),
@@ -138,18 +156,30 @@ class _MyLoginPage extends State<MyLoginPage> {
   }
 
   void _onLoginClick() {
-    String email = _emailController.text;
-    String pass = _passController.text;
-    var authBloc = MyApp.of(context)!.authBloc;
+    var _authBloc = MyApp.of(context)!.authBloc;
 
     LoadingDialog.showLoadingDialog(context, "Loading...");
-    authBloc.signIn(email, pass, () {
+    _authBloc.signIn(_emailController.text, _passController.text, () {
       LoadingDialog.hideLoadingDialog(context);
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => HomePage()));
     }, (msg) {
       LoadingDialog.hideLoadingDialog(context);
       MsgDialog.showMsgDialog(context, "Sign in", msg);
+    });
+  }
+
+  void _onLoginWithGoogleClick() {
+    var _authBloc = MyApp.of(context)!.authBloc;
+
+    LoadingDialog.showLoadingDialog(context, "Loading...");
+    _authBloc.signInWithGoogle(() {
+      LoadingDialog.hideLoadingDialog(context);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => HomePage()));
+    }, (msg) {
+      LoadingDialog.hideLoadingDialog(context);
+      MsgDialog.showMsgDialog(context, "Sign in with Google", msg);
     });
   }
 }

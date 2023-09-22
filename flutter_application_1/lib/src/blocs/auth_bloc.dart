@@ -52,6 +52,10 @@ class AuthBloc {
     _firAuth.signIn(email, pass, onSuccess, onSignInError);
   }
 
+  void signInWithGoogle(Function onSuccess, Function(String) onSignInError) {
+    _firAuth.signInWithGoogle(onSuccess, onSignInError);
+  }
+
   void dispose() {
     _nameController.close();
     _emailController.close();
