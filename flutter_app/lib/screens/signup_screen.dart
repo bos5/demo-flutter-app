@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluiter_app/screens/home_screen.dart';
 import 'package:fluiter_app/screens/signin_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -10,6 +13,8 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _retypepasswordTextController =
+      TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
 
   @override
@@ -87,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Opacity(
                     opacity: 0.5,
                     child: TextField(
-                      controller: _passwordTextController,
+                      controller: _retypepasswordTextController,
                       obscureText: true,
                       decoration: const InputDecoration(
                         labelText: 'Confirm your password',
@@ -101,14 +106,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    () {};
+                    if (_passwordTextController.text ==
+                        _retypepasswordTextController.text) {
+                      FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                              email: _emailTextController.text,
+                              password: _passwordTextController.text)
+                          .then(
+                            (value) => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeScreen(),
+                                ),
+                              ),
+                            },
+                          );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
                   ),
                   child: const Center(
                     child: Text(
-                      'Update Password',
+                      'Sign Up',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluiter_app/screens/home_screen.dart';
 import 'package:fluiter_app/screens/reset_password.dart';
 import 'package:fluiter_app/screens/signup_screen.dart';
@@ -129,7 +130,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: (){},
                       icon: const Icon(
                         FontAwesomeIcons.google,
                         size: 40,
@@ -163,11 +164,17 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void _onLoginClick() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const HomeScreen(),
-      ),
-    );
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: _emailTextController.text,
+            password: _passwordTextController.text)
+        .then((value) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+    });
   }
 }

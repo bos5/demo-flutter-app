@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "137914091067",
+    "project_id": "signinform-c78a5",
+    "storage_bucket": "signinform-c78a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137914091067:android:cf6f6db253c4122f8e7e1e",
+        "android_client_info": {
+          "package_name": "com.example.fluiter_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4jn4oal8nDxwhxAd5w9OVntC8uHoo91I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -9,7 +10,6 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _emailTextController = TextEditingController();
-  final TextEditingController _passwordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,49 +54,22 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  alignment: AlignmentDirectional.bottomStart,
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: const Text('Password'),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                      "Please type your email we will send you a link to reset your password"),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0.0, 16, 0),
-                  child: Opacity(
-                    opacity: 0.5,
-                    child: TextField(
-                      controller: _passwordTextController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Type your password',
-                        prefixIcon: Icon(Icons.lock),
-                      ),
-                    ),
-                  ),
+                const SizedBox(
+                  height: 30,
                 ),
-                const SizedBox(height: 20,),
-                Container(
-                  alignment: AlignmentDirectional.bottomStart,
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: const Text('Password'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0.0, 16, 0),
-                  child: Opacity(
-                    opacity: 0.5,
-                    child: TextField(
-                      controller: _passwordTextController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Confirm your password',
-                        prefixIcon: Icon(Icons.lock),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 40,),
-                 ElevatedButton(
+                ElevatedButton(
                   onPressed: () {
-                    (){};
+                    FirebaseAuth.instance
+                        .sendPasswordResetEmail(
+                            email: _emailTextController.text)
+                        .then(
+                          (value) => Navigator.of(context).pop(),
+                        );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
