@@ -3,13 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/utils/popup.dart';
-import 'package:provider/provider.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:provider/provider.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginPrivider extends ChangeNotifier {
+class LoginProvider extends ChangeNotifier {
   bool _isSignedIn = false;
   bool get value => _isSignedIn;
-  LoginPrivider() {
+  bool _hasError = false;
+  bool get hasError => _hasError;
+  String? _name;
+  String? get name => _name;
+  String? _email;
+  String? get email => _email;
+  String? _photoUrl;
+  String? get photoUrl => _photoUrl;
+  String? _uid;
+  String? get uid => _uid;
+  String? _provider;
+  String? get provider => _provider;
+  final FacebookAuth facebookAuth = FacebookAuth.instance;
+
+  LoginProvider() {
     checkSignInUser();
   }
   Future<void> checkSignInUser() async {
@@ -24,15 +39,49 @@ class LoginPrivider extends ChangeNotifier {
     });
   }
 
-  Future<void> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
-    final OAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+  Future<void> signInWithFacebook() async {
+    final LoginResult result = await facebookAuth.login();
+    if (result.status == LoginStatus.success) {
+      final AccessToken accessToken = result.accessToken!;
+      final OAuthCredential credential =
+          FacebookAuthProvider.credential(accessToken.token);
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = userCredential.user;
+      _name = user!.displayName;
+      _email = user.email;
+      _photoUrl = user.photoURL;
+      _uid = user.uid;
+      _provider = 'Facebook';
+      notifyListeners();
+    } else {
+      _hasError = true;
+      notifyListeners();
+    }
   }
+  // Future<void> signInWithGoogle() async {
+  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //   if (googleUser == null) {
+  //     _hasError = true;
+  //     notifyListeners();
+  //   } else {
+  //     final GoogleSignInAuthentication googleAuth =
+  //         await googleUser.authentication;
+  //     final OAuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleAuth.accessToken,
+  //       idToken: googleAuth.idToken,
+  //     );
+  //     final UserCredential userCredential =
+  //         await FirebaseAuth.instance.signInWithCredential(credential);
+  //     final User? user = userCredential.user;
+  //     _name = user!.displayName;
+  //     _email = user.email;
+  //     _photoUrl = user.photoURL;
+  //     _uid = user.uid;
+  //     _provider = 'Google';
+  //     notifyListeners();
+  //   }
+  // }
 
   void changeValue(bool value) {
     _isSignedIn = value;
@@ -52,8 +101,6 @@ loginWithEmail(BuildContext context, TextEditingController emailContrl,
         builder: (context) => const MyHomePage(),
       ),
     );
-  }).onError((error, stackTrace) {
-    print(error.toString());
   }).catchError((error) {
     showdialog(context, 'Sign in', error.toString());
   });

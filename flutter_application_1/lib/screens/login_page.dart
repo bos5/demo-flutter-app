@@ -144,12 +144,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.only(top: 10, bottom: 5),
+              padding: const EdgeInsets.only(top: 10, bottom: 0),
               alignment: Alignment.center,
               child: Text('Or sign in with',
                   style: TextStyle(fontSize: 15, color: Colors.grey[400])),
             ),
-            loginOption(context),
+            const LoginOption(),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
