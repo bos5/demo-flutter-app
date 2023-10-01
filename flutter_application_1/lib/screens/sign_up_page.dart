@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/firebase_activity/firebase_login_signup.dart';
 import 'package:flutter_application_1/utils/validate.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class MySignUpPage extends StatefulWidget {
-  const MySignUpPage({super.key});
+  const MySignUpPage({Key? key}) : super(key: key);
   @override
   State<MySignUpPage> createState() => _MySignUpPageState();
 }
@@ -39,14 +40,6 @@ class _MySignUpPageState extends State<MySignUpPage> {
           ),
         ),
         child: Column(children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(10),
-          //   child: Image.asset(
-          //     "images/doctors.png",
-          //     scale: 2.5,
-          //     // height: 300,
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
             child: Column(
@@ -176,6 +169,37 @@ class _MySignUpPageState extends State<MySignUpPage> {
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,
+            ),
+          ),
+          // test
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                final LoginResult result = await FacebookAuth.instance.login();
+
+                if (result.status == LoginStatus.success) {
+                  // User is logged in successfully
+                  final AccessToken accessToken = result.accessToken!;
+                  // Use the accessToken for further operations like fetching user data
+                } else if (result.status == LoginStatus.cancelled) {
+                  // User cancelled the login process
+                  print('cancel');
+                } else {
+                  // Error occurred during the login process
+                  print('error');
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'facebook',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           ),
           Container(

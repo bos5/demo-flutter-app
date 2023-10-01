@@ -5,7 +5,7 @@ import 'package:flutter_application_1/screens/sign_up_page.dart';
 import 'package:flutter_application_1/utils/validate.dart';
 
 class MyLoginPage extends StatefulWidget {
-  const MyLoginPage({super.key});
+  const MyLoginPage({Key? key}) : super(key: key);
   @override
   State<MyLoginPage> createState() => _MyLoginPageState();
 }

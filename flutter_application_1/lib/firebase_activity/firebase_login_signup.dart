@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
+import 'package:flutter_application_1/utils/navigate_page.dart';
 import 'package:flutter_application_1/utils/popup.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:provider/provider.dart';
@@ -37,6 +38,22 @@ class LoginProvider extends ChangeNotifier {
         notifyListeners();
       }
     });
+  }
+
+  Future setSignInUser() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      _isSignedIn = false;
+      notifyListeners();
+    } else {
+      _name = user.displayName;
+      _email = user.email;
+      _photoUrl = user.photoURL;
+      _uid = user.uid;
+      _provider = 'Google';
+      _isSignedIn = true;
+      notifyListeners();
+    }
   }
 
   Future<void> signInWithFacebook() async {
@@ -115,12 +132,7 @@ signUpWithEmail(BuildContext context, TextEditingController emailContrl,
         .createUserWithEmailAndPassword(
             email: emailContrl.text, password: passwordContrl.text)
         .then((value) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MyLoginPage(),
-        ),
-      );
+      navigatePage(context, const MyLoginPage());
     }).onError((error, stackTrace) {
       print(error.toString());
     }).then((value) {
