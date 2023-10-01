@@ -4,6 +4,8 @@ import 'package:fluiter_app/screens/reset_password.dart';
 import 'package:fluiter_app/screens/signup_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:fluiter_app/services/auth_service.dart';
+
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -114,7 +116,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        signInWithFacebook();
+                      },
                       icon: const Icon(
                         FontAwesomeIcons.facebook,
                         size: 40,
@@ -130,7 +134,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     IconButton(
-                      onPressed: (){},
+                      onPressed: ()  {
+                        signInWithGoogle();
+                      },
                       icon: const Icon(
                         FontAwesomeIcons.google,
                         size: 40,
