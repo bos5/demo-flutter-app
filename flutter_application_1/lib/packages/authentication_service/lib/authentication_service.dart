@@ -1,7 +1,7 @@
-library authentication_service;
+library authentcation_service;
+
+export 'src/authentication_service.dart';
+export 'src/models/models.dart';
 
 /// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+
