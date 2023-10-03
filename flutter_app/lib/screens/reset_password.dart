@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluiter_app/utils/error_dialog.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -64,12 +65,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    FirebaseAuth.instance
-                        .sendPasswordResetEmail(
-                            email: _emailTextController.text)
-                        .then(
-                          (value) => Navigator.of(context).pop(),
-                        );
+                    _onResetClick();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
@@ -87,5 +83,18 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ),
       ),
     );
+  }
+
+  //not checking if the email is register or not
+  void _onResetClick() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailTextController.text)
+          .then(
+            (value) => Navigator.of(context).pop(),
+          );
+    } on FirebaseAuthException catch (e) {
+      await showErrorDialog(context, 'Invalid emails');
+    }
   }
 }

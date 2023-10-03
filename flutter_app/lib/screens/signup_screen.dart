@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluiter_app/screens/home_screen.dart';
 import 'package:fluiter_app/screens/signin_screen.dart';
+import 'package:fluiter_app/utils/error_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
@@ -106,23 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (_passwordTextController.text ==
-                        _retypepasswordTextController.text) {
-                      FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: _emailTextController.text,
-                              password: _passwordTextController.text)
-                          .then(
-                            (value) => {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
-                                ),
-                              ),
-                            },
-                          );
-                    }
+                    _onSignUpClick();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
@@ -156,5 +141,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  void _onSignUpClick() async {
+    try {
+      if (_passwordTextController.text == _retypepasswordTextController.text) {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _emailTextController.text,
+                password: _passwordTextController.text)
+            .then(
+              (value) => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                ),
+              },
+            );
+        showErrorDialog(context, "Password not match");
+      }
+    } on FirebaseAuthException catch (e) {
+      await showErrorDialog(context, "${e.code}");
+    }
   }
 }

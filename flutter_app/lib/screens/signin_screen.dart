@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluiter_app/screens/home_screen.dart';
 import 'package:fluiter_app/screens/reset_password.dart';
 import 'package:fluiter_app/screens/signup_screen.dart';
+import 'package:fluiter_app/utils/error_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluiter_app/services/auth_service.dart';
-
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -134,7 +134,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     IconButton(
-                      onPressed: ()  {
+                      onPressed: () {
                         signInWithGoogle();
                       },
                       icon: const Icon(
@@ -169,18 +169,28 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  void _onLoginClick() {
-    FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-            email: _emailTextController.text,
-            password: _passwordTextController.text)
-        .then((value) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
-      );
-    });
+  void _onLoginClick() async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailTextController.text,
+              password: _passwordTextController.text)
+          .then((value) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        await showErrorDialog(context, 'User not found');
+      } else if (e.code == "wrong-password") {
+        await showErrorDialog(context, 'Wrong password');
+      } else {
+        await showErrorDialog(context, 'Invalid credentials');
+      }
+    }
   }
 }
