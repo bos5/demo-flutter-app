@@ -14,7 +14,7 @@ final class AuthenticationInitial extends AuthenticationState {
     this.user, {
     required this.status,
   });
-  const AuthenticationInitial.authenticated({required User user})
+  const AuthenticationInitial.authenticated({required User? user})
       : this._(user, status: AppStatus.authenticated);
   const AuthenticationInitial.unauthenticated()
       : this._(null, status: AppStatus.unauthenticated);

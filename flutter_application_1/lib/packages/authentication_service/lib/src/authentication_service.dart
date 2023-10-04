@@ -11,6 +11,7 @@ extension on firebase_auth.User {
       name: displayName,
       email: email,
       photo: photoURL,
+      provider: providerData[0].providerId,
     );
   }
 }
@@ -91,5 +92,13 @@ class AuthenticationService {
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw LoginWithFaceBookFailure.fromCode(e.code);
     }
+  }
+
+  Future<void> logout() async {
+    await Future.wait([
+      _firebaseAuth.signOut(),
+      _googleSignIn.signOut(),
+      _facebookAuth.logOut(),
+    ]);
   }
 }
