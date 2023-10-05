@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/src/app.dart';
 import 'package:flutter_application_1/src/resources/dialog/loading_dialog.dart';
 import 'package:flutter_application_1/src/resources/dialog/msg_dialog.dart';
+import 'package:flutter_application_1/src/resources/forgot_pw_page.dart';
 import 'package:flutter_application_1/src/resources/home_page.dart';
 import 'package:flutter_application_1/src/resources/register_page.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
@@ -16,8 +17,8 @@ class MyLoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<MyLoginPage> {
   final Logger logger = Logger();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
   bool _emailInvalid = false;
   bool _passInvalid = false;
 
@@ -89,7 +90,10 @@ class _LoginPageState extends State<MyLoginPage> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () {
-                    logger.d('Forgot password tapped');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotPasswordPage()));
                   },
                   child: const Text('Forgot password?'),
                 ),
@@ -111,7 +115,7 @@ class _LoginPageState extends State<MyLoginPage> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      logger.d('Login with Facebook');
+                      _onLoginWithFacebookClick();
                     },
                     icon: const Icon(FontAwesome.facebook),
                   ),
@@ -180,6 +184,20 @@ class _LoginPageState extends State<MyLoginPage> {
     }, (msg) {
       LoadingDialog.hideLoadingDialog(context);
       MsgDialog.showMsgDialog(context, "Sign in with Google", msg);
+    });
+  }
+
+  void _onLoginWithFacebookClick() {
+    var _authBloc = MyApp.of(context)!.authBloc;
+
+    LoadingDialog.showLoadingDialog(context, "Loading...");
+    _authBloc.signInWithFacebook(() {
+      LoadingDialog.hideLoadingDialog(context);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => HomePage()));
+    }, (msg) {
+      LoadingDialog.hideLoadingDialog(context);
+      MsgDialog.showMsgDialog(context, "Sign in with Facebook", msg);
     });
   }
 }

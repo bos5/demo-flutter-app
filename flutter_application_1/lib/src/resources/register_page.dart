@@ -3,6 +3,7 @@ import 'package:flutter_application_1/src/blocs/auth_bloc.dart';
 import 'package:flutter_application_1/src/resources/dialog/loading_dialog.dart';
 import 'package:flutter_application_1/src/resources/dialog/msg_dialog.dart';
 import 'package:flutter_application_1/src/resources/home_page.dart';
+import 'package:flutter_application_1/src/resources/login_page.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 
 class MyRegisterPage extends StatefulWidget {
@@ -143,16 +144,22 @@ class _MyRegisterPage extends State<MyRegisterPage> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                child: RichText(
-                  text: const TextSpan(
-                      text: "Already a User? ",
-                      style: TextStyle(color: Colors.grey, fontSize: 16),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: "Login now",
-                          style: TextStyle(color: Colors.blue, fontSize: 16),
-                        ),
-                      ]),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyLoginPage()));
+                  },
+                  child: RichText(
+                    text: const TextSpan(
+                        text: "Already a User? ",
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: "Login now",
+                            style: TextStyle(color: Colors.blue, fontSize: 16),
+                          ),
+                        ]),
+                  ),
                 ),
               ),
             ]),

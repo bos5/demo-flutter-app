@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirAuth {
@@ -40,7 +41,20 @@ class FirAuth {
     await _firebaseAuth.signInWithCredential(credential).then((user) {
       onSuccess();
     }).catchError((err) {
-      _onSignInWithGoogleErr(err.code, onSignInError);
+      _onSignInWithCredentialErr(err.code, onSignInError);
+    });
+  }
+
+  signInWithFacebook(Function onSuccess, Function(String) onSignInError) async {
+    LoginResult loginResult = await FacebookAuth.instance.login();
+
+    OAuthCredential credential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    // finally let's sign in
+    await _firebaseAuth.signInWithCredential(credential).then((user) {
+      onSuccess();
+    }).catchError((err) {
+      _onSignInWithCredentialErr(err.code, onSignInError);
     });
   }
 
@@ -57,7 +71,7 @@ class FirAuth {
     });
   }
 
-  void _onSignInWithGoogleErr(
+  void _onSignInWithCredentialErr(
       String code, Function(String) onSignInWithGoogleError) {
     switch (code) {
       case "account-exists-with-different-credential":
