@@ -1,7 +1,7 @@
-import 'package:authentication_service/src/login_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'login_exception.dart';
 import 'models/models.dart';
 
 extension on firebase_auth.User {
@@ -29,14 +29,15 @@ class AuthenticationService {
     FacebookAuth? facebookAuth,
     CacheClient? cacheClient,
   })  : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
+        _googleSignIn = googleSignIn ?? GoogleSignIn(),
         _facebookAuth = facebookAuth ?? FacebookAuth.instance,
         _cacheClient = cacheClient ?? CacheClient();
-  Stream<User?> get user => _firebaseAuth.authStateChanges().map((user) {
-        _cacheClient.write(_userCache, user?.toUser);
-        return user?.toUser;
+  Stream<User> get user => _firebaseAuth.userChanges().map((firebaseUser) {
+        final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
+        _cacheClient.write(_userCache, user);
+        return user;
       });
-  User? get currentUser => _cacheClient.read(_userCache) ?? User.empty;
+  User get currentUser => _cacheClient.read(_userCache) ?? User.empty;
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,

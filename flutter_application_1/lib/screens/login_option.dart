@@ -2,11 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/utils/navigate_page.dart';
-import 'package:flutter_application_1/utils/popup.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_application_1/firebase_activity/firebase_login_signup.dart';
-import 'package:provider/provider.dart';
 
 class LoginOption extends StatelessWidget {
   const LoginOption({Key? key}) : super(key: key);
@@ -18,6 +15,7 @@ class LoginOption extends StatelessWidget {
       alignment: MainAxisAlignment.center,
       children: [
         IconButton(
+            padding: const EdgeInsets.all(5),
             onPressed: () async {
               try {
                 await handleFaceBookAuth();
@@ -59,20 +57,5 @@ class LoginOption extends StatelessWidget {
     final OAuthCredential facebookAuthCredential =
         FacebookAuthProvider.credential(result.accessToken!.token);
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
-
-  Future handleFacebookAuth(context, isSignedIn) async {
-    final loginProvider = context.read<LoginProvider>();
-    await loginProvider.signInWithFacebook().then((value) {
-      if (loginProvider.hasError) {
-        showdialog(context, 'Error', 'Something went wrong');
-      } else {
-        loginProvider.setSignInUser().then((value) {
-          if (loginProvider.value) {
-            replacePage(context, const MyHomePage());
-          }
-        });
-      }
-    });
   }
 }

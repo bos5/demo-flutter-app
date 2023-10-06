@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/firebase_activity/firebase_login_signup.dart';
 import 'package:flutter_application_1/screens/login_option.dart';
 import 'package:flutter_application_1/screens/sign_up_page.dart';
 import 'package:flutter_application_1/utils/validate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_application_1/packages/authentication_service/lib/authentication_service.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({Key? key}) : super(key: key);
@@ -94,10 +96,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       alignment: Alignment.centerLeft,
-                      // decoration: const BoxDecoration(
-                      //   color: Colors.white,
-                      //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                      // ),
                       child: TextField(
                         obscureText: true,
                         decoration: InputDecoration(
@@ -127,7 +125,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   if (emailContrl.text.isEmpty || passwordContrl.text.isEmpty) {
                     return;
                   } else {
-                    loginWithEmail(context, emailContrl, passwordContrl);
+                    // loginWithEmail(context, emailContrl, passwordContrl);
+                    context
+                        .read<AuthenticationService>()
+                        .loginWithEmailAndPassword(
+                            email: emailContrl.text,
+                            password: passwordContrl.text);
                   }
                 },
                 style: ElevatedButton.styleFrom(

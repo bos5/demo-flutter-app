@@ -5,7 +5,7 @@ class CacheClient {
     return _cache[key] as T?;
   }
 
-  void write<T>(String key, T value) {
+  void write<T>(String key, Object? value) {
     _cache[key] = value;
   }
 }

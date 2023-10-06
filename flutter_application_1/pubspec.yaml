@@ -45,8 +45,9 @@ dependencies:
   flutter_bloc: ^8.0.0
   equatable: ^2.0.3
   meta: ^1.8.0
-  authentication_service:
-    path: F:\flutter_windows_3.13.3-stable\demo-flutter-app\flutter_application_1\lib\packages\authentication_service
+  google_sign_in: ^5.2.1
+  # authentication_service:
+  #   path: packages\authentication_service
 
 dev_dependencies:
   flutter_test:

@@ -8,7 +8,7 @@ sealed class AuthenticationEvent {
 class AppUserChanged extends AuthenticationEvent {
   const AppUserChanged(this.user);
 
-  final User? user;
+  final User user;
 }
 
 class LogoutRequested extends AuthenticationEvent {

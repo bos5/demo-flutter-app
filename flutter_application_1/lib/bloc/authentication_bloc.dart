@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:authentication_service/authentication_service.dart';
+// import 'package:authentication_service/authentication_service.dart';
 import 'package:meta/meta.dart';
+import 'package:flutter_application_1/packages/authentication_service/lib/authentication_service.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
@@ -13,7 +14,7 @@ class AuthenticationBloc
   AuthenticationBloc({
     required AuthenticationService authenticationService,
   })  : _authenticationService = authenticationService,
-        super((authenticationService.currentUser!.isEmpty)
+        super((authenticationService.currentUser.isEmpty)
             ? const AuthenticationInitial.unauthenticated()
             : AuthenticationInitial.authenticated(
                 user: authenticationService.currentUser)) {
@@ -24,12 +25,12 @@ class AuthenticationBloc
       (user) => add(AppUserChanged(user)),
     );
   }
-  late final StreamSubscription<User?> _userStreamSubscription;
+  late final StreamSubscription<User> _userStreamSubscription;
   Future<void> _appUserChanged(
     AppUserChanged event,
     Emitter<AuthenticationState> emit,
   ) async {
-    if (event.user != null) {
+    if (!event.user.isEmpty) {
       emit(AuthenticationInitial.authenticated(user: event.user));
     } else {
       emit(const AuthenticationInitial.unauthenticated());

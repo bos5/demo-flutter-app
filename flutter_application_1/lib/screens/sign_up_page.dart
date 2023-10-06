@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/firebase_activity/firebase_login_signup.dart';
+import 'package:flutter_application_1/events/firebase_login_signup.dart';
 import 'package:flutter_application_1/utils/validate.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
