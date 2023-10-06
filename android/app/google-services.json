@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526607188164",
+    "project_id": "login-remake",
+    "storage_bucket": "login-remake.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526607188164:android:d4b894aa06b5038ee74991",
+        "android_client_info": {
+          "package_name": "com.example.login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYI-XvRf4Z5oBvx3KzOezkS9C42bTknUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
