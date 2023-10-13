@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/events/firebase_login_signup.dart';
+import 'package:flutter_application_1/firebase_operation/firebase_login_signup.dart';
 import 'package:flutter_application_1/utils/validate.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class MySignUpPage extends StatefulWidget {
   const MySignUpPage({Key? key}) : super(key: key);
@@ -172,36 +172,36 @@ class _MySignUpPageState extends State<MySignUpPage> {
             ),
           ),
           // test
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () async {
-                final LoginResult result = await FacebookAuth.instance.login();
+          // Container(
+          //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          //   width: double.infinity,
+          //   child: ElevatedButton(
+          //     onPressed: () async {
+          //       final LoginResult result = await FacebookAuth.instance.login();
 
-                if (result.status == LoginStatus.success) {
-                  // User is logged in successfully
-                  final AccessToken accessToken = result.accessToken!;
-                  // Use the accessToken for further operations like fetching user data
-                } else if (result.status == LoginStatus.cancelled) {
-                  // User cancelled the login process
-                  print('cancel');
-                } else {
-                  // Error occurred during the login process
-                  print('error');
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                'facebook',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ),
+          //       if (result.status == LoginStatus.success) {
+          //         // User is logged in successfully
+          //         final AccessToken accessToken = result.accessToken!;
+          //         // Use the accessToken for further operations like fetching user data
+          //       } else if (result.status == LoginStatus.cancelled) {
+          //         // User cancelled the login process
+          //         print('cancel');
+          //       } else {
+          //         // Error occurred during the login process
+          //         print('error');
+          //       }
+          //     },
+          //     style: ElevatedButton.styleFrom(
+          //       shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(10),
+          //       ),
+          //     ),
+          //     child: const Text(
+          //       'facebook',
+          //       style: TextStyle(fontSize: 20),
+          //     ),
+          //   ),
+          // ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             width: double.infinity,

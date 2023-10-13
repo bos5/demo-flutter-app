@@ -128,3 +128,23 @@ class LoginWithGoogleFailure implements Exception {
     }
   }
 }
+
+class ResetPassworkFailure implements Exception {
+  final String message;
+  ResetPassworkFailure(this.message);
+  factory ResetPassworkFailure.fromCode(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return ResetPassworkFailure('The email address is not valid.');
+      case 'user-not-found':
+        return ResetPassworkFailure(
+            'There is no user corresponding to this email address.');
+      case 'too-many-requests':
+        return ResetPassworkFailure('Too many requests. Try again later.');
+      case 'network-request-failed':
+        return ResetPassworkFailure('Network error. Try again later.');
+      default:
+        return ResetPassworkFailure('An undefined Error happened.');
+    }
+  }
+}

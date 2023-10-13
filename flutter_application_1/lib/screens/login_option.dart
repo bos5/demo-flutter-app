@@ -10,20 +10,16 @@ class LoginOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ButtonTheme(
-        child: ButtonBar(
+    return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: [
         IconButton(
             padding: const EdgeInsets.all(5),
             onPressed: () async {
               try {
-                await handleFaceBookAuth();
+                // await handleFaceBookAuth();
               } catch (e) {
                 print(e);
-              }
-              if (context.mounted) {
-                navigatePage(context, const MyHomePage());
               }
             },
             icon: Icon(
@@ -41,6 +37,7 @@ class LoginOption extends StatelessWidget {
               color: Colors.red[900],
             )),
         IconButton(
+            padding: const EdgeInsets.all(5),
             onPressed: () {},
             icon: const Icon(
               FontAwesomeIcons.twitter,
@@ -48,7 +45,7 @@ class LoginOption extends StatelessWidget {
               color: Colors.blue,
             )),
       ],
-    ));
+    );
   }
 
   Future<UserCredential> handleFaceBookAuth() async {

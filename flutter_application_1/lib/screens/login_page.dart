@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/bloc/login_bloc.dart';
+import 'package:flutter_application_1/screens/forget_password.dart';
+import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/login_option.dart';
 import 'package:flutter_application_1/screens/sign_up_page.dart';
+import 'package:flutter_application_1/utils/navigate_page.dart';
+import 'package:flutter_application_1/utils/popup.dart';
 import 'package:flutter_application_1/utils/validate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:flutter_application_1/packages/authentication_service/lib/authentication_service.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({Key? key}) : super(key: key);
@@ -14,11 +18,19 @@ class MyLoginPage extends StatefulWidget {
 
 class _MyLoginPageState extends State<MyLoginPage> {
   bool emailValid = false;
+  late LoginBloc loginBloc;
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    loginBloc = LoginBloc();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // print(loginBloc.state);
     var emailContrl = TextEditingController();
     var passwordContrl = TextEditingController();
-
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -55,10 +67,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                      // decoration: const BoxDecoration(
-                      //   color: Colors.white,
-                      //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                      // ),
                       child: TextField(
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.person),
@@ -112,7 +120,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               alignment: Alignment.bottomRight,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  navigatePage(context, const ForgetPasswordPage());
+                },
                 child: const Text('Forgot password?',
                     style: TextStyle(fontSize: 15, color: Colors.black)),
               ),
@@ -126,16 +136,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     return;
                   } else {
                     // loginWithEmail(context, emailContrl, passwordContrl);
-                    context
-                        .read<AuthenticationService>()
-                        .loginWithEmailAndPassword(
-                            email: emailContrl.text,
-                            password: passwordContrl.text);
+                    loginBloc.add(LoginButtonPressed(
+                        email: emailContrl.text,
+                        password: passwordContrl.text));
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 216, 36, 126),
-                  // foregroundColor: const Color(0xFFE94057),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -146,13 +153,63 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 ),
               ),
             ),
+            BlocBuilder<LoginBloc, LoginState>(
+                bloc: loginBloc,
+                builder: (context, state) {
+                  if (state is LoginSuccess) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      navigatePage(context, MyHomePage(user: state.user));
+                    });
+                  } else if (state is LoginFailure) {
+                    return showdialog(context, 'Sign in', state.error);
+                  } else if (state is LoginLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return Container();
+                }),
             Container(
               padding: const EdgeInsets.only(top: 10, bottom: 0),
               alignment: Alignment.center,
               child: Text('Or sign in with',
                   style: TextStyle(fontSize: 15, color: Colors.grey[400])),
             ),
-            const LoginOption(),
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                    padding: const EdgeInsets.all(5),
+                    onPressed: () async {
+                      try {
+                        loginBloc.add(FacebookLoginPress());
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    icon: Icon(
+                      FontAwesomeIcons.facebook,
+                      size: 40,
+                      color: Colors.blue[900],
+                    )),
+                IconButton(
+                    padding: const EdgeInsets.all(5),
+                    onPressed: () {
+                      // FirebaseAuth.instance.;
+                    },
+                    icon: Icon(
+                      FontAwesomeIcons.google,
+                      size: 40,
+                      color: Colors.red[900],
+                    )),
+                IconButton(
+                    padding: const EdgeInsets.all(5),
+                    onPressed: () {},
+                    icon: const Icon(
+                      FontAwesomeIcons.twitter,
+                      size: 40,
+                      color: Colors.blue,
+                    )),
+              ],
+            ),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -163,7 +220,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-              alignment: Alignment.center,
+              alignment: Alignment.bottomCenter,
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
